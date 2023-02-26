@@ -10,7 +10,4 @@ class Food(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=pos)
 
     def colision_check(self, Snake):
-        if self.rect.colliderect(Snake):
-            return True
-        else:
-            return False
+        return self.rect.colliderect(Snake)
