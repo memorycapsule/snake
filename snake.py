@@ -12,9 +12,10 @@ class Snake(pygame.sprite.Sprite):
 
         self.direction = pygame.math.Vector2()
         self.pos = pygame.math.Vector2(self.rect.center)
-        self.speed = 200
-
+        self.length = 1
+        self.speed = 2
         # one segment
+        self.time_now = pygame.time.get_ticks()
         self.segments = [self.rect.copy()]
 
     def update(self, dt):
@@ -23,24 +24,21 @@ class Snake(pygame.sprite.Sprite):
 
     def input(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            self.direction.x = -1
-        elif keys[pygame.K_RIGHT]:
-            self.direction.x = 1
-        else:
-            self.direction.x = 0
 
-        if keys[pygame.K_UP]:
-            self.direction.y = -1
+        print(self.direction)
+
+        if keys[pygame.K_LEFT]:
+            self.direction = [-1, 0]
+        elif keys[pygame.K_RIGHT]:
+            self.direction = [1, 0]
+        elif keys[pygame.K_UP]:
+            self.direction = [0, -1]
         elif keys[pygame.K_DOWN]:
-            self.direction.y = 1
-        else:
-            self.direction.y = 0
+            self.direction = [0, 1]
 
     def move(self, dt):
-        self.pos += self.direction * self.speed * dt
-        self.rect.center = self.pos
-
+        # can do smthin like self.rect.move_ip(self.direction * self.speed * dt)
+        self.rect.move_ip(self.direction)
         for i in range(len(self.segments)-1, 0, -1):
             self.segments[i].center = self.segments[i-1].center
         self.segments[0].center = self.rect.center
@@ -49,9 +47,12 @@ class Snake(pygame.sprite.Sprite):
         segment = Segments(self.segments[-1].copy(), [pygame.sprite.Group()])
         self.segments.append(segment)
 
-    def draw(self, surface):
-        snake_surface = pygame.Surface((16, 16))
-        snake_surface.fill((255, 0, 0))
-        for segment in self.segments:
-            pygame.draw.rect(snake_surface, (255, 255, 255), segment)
-        surface.blit(snake_surface, self.rect)
+    def draw_segments(self, surface):
+        [pygame.draw.rect(surface, 'red', segment)
+         for segment in self.segments]
+
+        # for segment in self.segments:
+        # pygame.draw.rect(snake_surface, (255, 255, 255), segment)
+        # surface.blit(snake_surface, self.rect)
+    def colision_check(self, other):
+        return self.rect.colliderect(other.rect)

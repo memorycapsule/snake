@@ -23,9 +23,12 @@ class Level:
 
     def run(self, dt):
         self.display_surface.fill('black')
+        # uhhhh
         self.all_sprites.draw(self.display_surface)
         self.all_sprites.update(dt)
-        self.player.draw(self.display_surface)
+        # drawing segments is not working
+        self.player.draw_segments(self.display_surface)
+        self.player.update(dt)
 
         if self.food.colision_check(self.player):
             self.player.addsegment()
