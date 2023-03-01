@@ -17,21 +17,27 @@ class Level:
         self.setup()
 
     def setup(self):
-        self.player = Snake((util.width/2, util.width/2), self.all_sprites)
-        self.food = Food((random.randint(0, util.width),
-                         random.randint(0, util.height)), self.all_sprites)
+        self.player = Snake((util.width//2, util.width//2), self.all_sprites)
+        # Position the food to spawn within the grids
+        self.food = Food(
+            (random.randrange(32 + 16, util.width - 32 - 16, 32),
+             random.randrange(32 + 16, util.width - 32 - 16, 32)),
+            self.all_sprites)
 
     def run(self, dt):
         self.display_surface.fill('black')
-        # uhhhh
+        time_now = pygame.time.get_ticks()
         self.all_sprites.draw(self.display_surface)
-        self.all_sprites.update(dt)
+
+        # update every 500 ms?
+        if time_now - 500 == 0:
+            self.all_sprites.update(dt)
         # drawing segments is not working
         self.player.draw_segments(self.display_surface)
         self.player.update(dt)
 
         if self.food.colision_check(self.player):
-            self.player.addsegment()
+            self.player.add_segment()
             self.food.kill()
-            self.food = Food((random.randint(0, util.width),
-                             random.randint(0, util.height)), self.all_sprites)
+            self.food = Food(pygame.Vector2((random.randrange(32 + 16, util.width - 32 - 16, 32),
+                                             random.randrange(32 + 16, util.width - 32 - 16, 32)),), self.all_sprites)
