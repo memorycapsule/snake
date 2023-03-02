@@ -19,7 +19,8 @@ class Game:
                     pygame.quit()
                     exit()  # the same as sys.exit()?
             # Delta Time
-            dt = self.clock.tick() / 1000
+            # Maybe a better way to slow down the game?
+            dt = self.clock.tick(60)
             self.level.run(dt)
             pygame.display.update()
 

@@ -9,5 +9,5 @@ class Food(pygame.sprite.Sprite):
         self.image.fill('green')
         self.rect = self.image.get_rect(center=pos)
 
-    def colision_check(self, Snake):
-        return self.rect.colliderect(Snake)
+    def colision_check(self, snake):
+        return self.rect.colliderect(snake.rect)
